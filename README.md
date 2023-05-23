@@ -1,5 +1,6 @@
-[![Tests](https://github.com/alebedev85/mesto-backend/actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
+[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/alebedev85/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
 # Проект Mesto фронтенд + бэкенд
+
 
 ## Директории
 
