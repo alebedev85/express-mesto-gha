@@ -27,7 +27,7 @@ const getUserById = (req, res) => {
 const postUser = (req, res) => {
   usersModel.create(req.body)
     .then((user) => {
-      res.send(user);
+      res.status(201).send(user);
     })
     .catch((err) => {
       handelError(err, res);
