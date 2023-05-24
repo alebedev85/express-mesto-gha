@@ -1,8 +1,12 @@
 const usersModel = require('../models/user');
 
 const handelError = (err, res) => {
+  if (err.name === 'ValidationError') {
+    res.status(400).send({ message: 'Переданы некорректные данные при создании' });
+    return;
+  };
   if (err.message === 'Notfound') {
-    res.status(404).send({ message: 'User not found' });
+    res.status(404).send({ message: 'Пользователь не найден.' });
     return;
   };
   res.status(500).send({
@@ -50,7 +54,7 @@ const postUser = (req, res) => {
 };
 
 const edithUser = (req, res) => {
-  usersModel.findByIdAndUpdate(req.user._id, req.body, {new: true,})
+  usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, })
     .orFail(() => {
       throw new Error('Notfound');
     })
@@ -63,7 +67,7 @@ const edithUser = (req, res) => {
 };
 
 const editAvatarhUser = (req, res) => {
-  usersModel.findByIdAndUpdate(req.user._id, req.body, {new: true,})
+  usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, })
     .orFail(() => {
       throw new Error('Notfound');
     })
