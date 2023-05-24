@@ -17,6 +17,12 @@ app.use((req, res, next) => {
 
 app.use(router);
 
+app.use((req, res) => {
+  res.status(404).send({
+      message: 'Ohh you are lost, read the API documentation to find your way back home :)'
+  })
+});
+
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
