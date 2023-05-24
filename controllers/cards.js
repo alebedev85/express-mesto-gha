@@ -1,16 +1,28 @@
 const cardsModel = require('../models/card');
 
+const handelError = (err, res) => {
+  if (err.name === 'ValidationError') {
+    res.status(400).send({ message: 'Переданы некорректные данные' });
+    return;
+  };
+  if (err.message === 'Notfound') {
+    res.status(404).send({ message: 'Карточка не найдена.' });
+    return;
+  };
+  res.status(500).send({
+    message: 'Internal Server Error',
+    err: err.message,
+    stack: err.stack,
+  });
+};
+
 const getCards = (req, res) => {
   cardsModel.find({})
     .then((cards) => {
       res.send(cards);
     })
     .catch((err) => {
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
@@ -23,11 +35,7 @@ const creatCard = (req, res) => {
       res.status(201).send(users);
     })
     .catch((err) => {
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
@@ -38,15 +46,7 @@ const deleteCard = (req, res) => {
     })
     .then(() => res.send({ message: "Пост удалён" }))
     .catch((err) => {
-      if (err.message === 'Notfound') {
-        res.status(404).send({ message: 'Card not found' });
-        return;
-      };
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
@@ -60,15 +60,7 @@ const likeCard = (req, res) => {
   })
     .then((card) => res.send(card))
     .catch((err) => {
-      if (err.message === 'Notfound') {
-        res.status(404).send({ message: 'Card not found' });
-        return;
-      };
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
@@ -82,15 +74,7 @@ const dislikeCard = (req, res) => {
   })
     .then((card) => res.send(card))
     .catch((err) => {
-      if (err.message === 'Notfound') {
-        res.status(404).send({ message: 'Card not found' });
-        return;
-      };
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 

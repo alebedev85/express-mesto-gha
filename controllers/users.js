@@ -2,7 +2,7 @@ const usersModel = require('../models/user');
 
 const handelError = (err, res) => {
   if (err.name === 'ValidationError') {
-    res.status(400).send({ message: 'Переданы некорректные данные при создании' });
+    res.status(400).send({ message: 'Переданы некорректные данные' });
     return;
   };
   if (err.message === 'Notfound') {
@@ -14,7 +14,7 @@ const handelError = (err, res) => {
     err: err.message,
     stack: err.stack,
   });
-}
+};
 
 const getUsers = (req, res) => {
   usersModel.find({})
@@ -22,11 +22,7 @@ const getUsers = (req, res) => {
       res.send(users);
     })
     .catch((err) => {
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
