@@ -1,7 +1,7 @@
 const cardsModel = require('../models/card');
 
 const handelError = (err, res) => {
-  if (err.name === 'ValidationError') {
+  if (err.name === 'ValidationError' || 'CastError') {
     res.status(400).send({ message: 'Переданы некорректные данные' });
     return;
   };

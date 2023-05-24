@@ -1,7 +1,8 @@
 const usersModel = require('../models/user');
 
 const handelError = (err, res) => {
-  if (err.name === 'ValidationError') {
+  console.log(err.name);
+  if (err.name === 'ValidationError' || 'CastError') {
     res.status(400).send({ message: 'Переданы некорректные данные' });
     return;
   };
