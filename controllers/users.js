@@ -1,21 +1,5 @@
 const usersModel = require('../models/user');
-
-const handelError = (err, res) => {
-  console.log(err.name);
-  if (err.message === 'Notfound') {
-    res.status(404).send({ message: 'Пользователь не найден.' });
-    return;
-  };
-  if (err.name === 'ValidationError' || 'CastError') {
-    res.status(400).send({ message: 'Переданы некорректные данные' });
-    return;
-  };
-  res.status(500).send({
-    message: 'Internal Server Error',
-    err: err.message,
-    stack: err.stack,
-  });
-};
+const handelError = require('../utils/handleError');
 
 const getUsers = (req, res) => {
   usersModel.find({})
