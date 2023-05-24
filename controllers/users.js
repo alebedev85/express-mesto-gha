@@ -1,5 +1,17 @@
 const usersModel = require('../models/user');
 
+const handelError = (err, res) => {
+  if (err.message === 'Notfound') {
+    res.status(404).send({ message: 'User not found' });
+    return;
+  };
+  res.status(500).send({
+    message: 'Internal Server Error',
+    err: err.message,
+    stack: err.stack,
+  });
+}
+
 const getUsers = (req, res) => {
   usersModel.find({})
     .then((users) => {
@@ -23,15 +35,7 @@ const getUserById = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.message === 'Notfound') {
-        res.status(404).send({ message: 'User not found' });
-        return;
-      };
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
@@ -41,11 +45,7 @@ const postUser = (req, res) => {
       res.status(201).send(user);
     })
     .catch((err) => {
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
@@ -58,15 +58,7 @@ const edithUser = (req, res) => {
       res.status(201).send(user);
     })
     .catch((err) => {
-      if (err.message === 'Notfound') {
-        res.status(404).send({ message: 'User not found' });
-        return;
-      };
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
@@ -79,15 +71,7 @@ const editAvatarhUser = (req, res) => {
       res.status(201).send(user);
     })
     .catch((err) => {
-      if (err.message === 'Notfound') {
-        res.status(404).send({ message: 'User not found' });
-        return;
-      };
-      res.status(500).send({
-        message: 'Internal Server Error',
-        err: err.message,
-        stack: err.stack,
-      });
+      handelError(err, res);
     });
 };
 
