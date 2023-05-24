@@ -42,7 +42,7 @@ const getUserById = (req, res) => {
 const postUser = (req, res) => {
   usersModel.create(req.body)
     .then((user) => {
-      res.status(201).send(user);
+      res.send(user);
     })
     .catch((err) => {
       handelError(err, res);
@@ -55,7 +55,7 @@ const edithUser = (req, res) => {
       throw new Error('Notfound');
     })
     .then((user) => {
-      res.status(201).send(user);
+      res.send(user);
     })
     .catch((err) => {
       handelError(err, res);
@@ -68,7 +68,7 @@ const editAvatarhUser = (req, res) => {
       throw new Error('Notfound');
     })
     .then((user) => {
-      res.status(201).send(user);
+      res.send(user);
     })
     .catch((err) => {
       handelError(err, res);
