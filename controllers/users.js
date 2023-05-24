@@ -35,7 +35,7 @@ const postUser = (req, res) => {
 };
 
 const edithUser = (req, res) => {
-  usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true})
+  usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
     .orFail(() => {
       throw new Error('Notfound');
     })
@@ -48,7 +48,7 @@ const edithUser = (req, res) => {
 };
 
 const editAvatarhUser = (req, res) => {
-  usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true})
+  usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
     .orFail(() => {
       throw new Error('Notfound');
     })

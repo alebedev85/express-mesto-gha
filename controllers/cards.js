@@ -29,7 +29,7 @@ const deleteCard = (req, res) => {
     .orFail(() => {
       throw new Error('Notfound');
     })
-    .then(() => res.send({ message: "Пост удалён" }))
+    .then(() => res.send({ message: 'Пост удалён' }))
     .catch((err) => {
       handelError(err, res);
     });

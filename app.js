@@ -19,8 +19,8 @@ app.use(router);
 
 app.use((req, res) => {
   res.status(404).send({
-      message: 'Ohh you are lost, read the API documentation to find your way back home :)'
-  })
+    message: 'Ohh you are lost, read the API documentation to find your way back home :)',
+  });
 });
 
 app.listen(3000, () => {
