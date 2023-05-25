@@ -4,7 +4,7 @@ const ERRORS_STATUS = {
   INTERNAL_ERROR: 500,
 };
 
-const handelError = (err, res) => {
+const handleError = (err, res) => {
   if (err.message === 'Notfound') {
     res.status(ERRORS_STATUS.NOT_FOUND).send({ message: 'По запросу ничего не найдено.' });
     return;
@@ -20,4 +20,4 @@ const handelError = (err, res) => {
   });
 };
 
-module.exports = handelError;
+module.exports = handleError;

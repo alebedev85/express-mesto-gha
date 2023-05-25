@@ -1,5 +1,5 @@
 const usersModel = require('../models/user');
-const handelError = require('../utils/handleError');
+const handleError = require('../utils/handleError');
 
 const getUsers = (req, res) => {
   usersModel.find({})
@@ -7,7 +7,7 @@ const getUsers = (req, res) => {
       res.send(users);
     })
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
@@ -20,7 +20,7 @@ const getUserById = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
@@ -30,7 +30,7 @@ const postUser = (req, res) => {
       res.status(201).send(user);
     })
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
@@ -43,7 +43,7 @@ const edithUser = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
@@ -56,7 +56,7 @@ const editAvatarhUser = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 

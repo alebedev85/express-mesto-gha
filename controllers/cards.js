@@ -1,5 +1,5 @@
 const cardsModel = require('../models/card');
-const handelError = require('../utils/handleError');
+const handleError = require('../utils/handleError');
 
 const getCards = (req, res) => {
   cardsModel.find({})
@@ -7,7 +7,7 @@ const getCards = (req, res) => {
       res.send(cards);
     })
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
@@ -20,7 +20,7 @@ const creatCard = (req, res) => {
       res.status(201).send(users);
     })
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
@@ -31,7 +31,7 @@ const deleteCard = (req, res) => {
     })
     .then(() => res.send({ message: 'Пост удалён' }))
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
@@ -45,7 +45,7 @@ const likeCard = (req, res) => {
   })
     .then((card) => res.send(card))
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
@@ -59,7 +59,7 @@ const dislikeCard = (req, res) => {
   })
     .then((card) => res.send(card))
     .catch((err) => {
-      handelError(err, res);
+      handleError(err, res);
     });
 };
 
