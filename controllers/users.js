@@ -27,7 +27,14 @@ const getUserById = (req, res) => {
     });
 };
 
-const postUser = (req, res) => {
+/**
+ *Функция регистрации нового пользователя, принимет данные пользователя,
+  хеширует и сохраняет хешированный пароль
+ * @param {*} req
+ * @param {*} res
+ * @returns оюъект с токеном токен
+ */
+const createUser = (req, res) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => usersModel.create({
       email: req.body.email,
@@ -68,11 +75,11 @@ const editAvatarhUser = (req, res) => {
 };
 
 /**
- *Функция регистрации, принимает емеил и пороль,
-  проверяет пороль и генерирует токен
+ *Функция авторизации, принимает email и пороль,
+  ищет пользователя по email, проверяет пороль и генерирует токен
  * @param {*} req
  * @param {*} res
- * @returns сгенерированный токен
+ * @returns оюъект с токеном токен
  */
 const login = (req, res) => {
   const { email, password } = req.body;
@@ -108,7 +115,7 @@ const login = (req, res) => {
 module.exports = {
   getUsers,
   getUserById,
-  postUser,
+  createUser,
   edithUser,
   editAvatarhUser,
   login,
