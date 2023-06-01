@@ -1,4 +1,6 @@
+const bcrypt = require('bcryptjs');
 const usersModel = require('../models/user');
+
 const handleError = require('../utils/handleError');
 
 const getUsers = (req, res) => {
@@ -25,7 +27,11 @@ const getUserById = (req, res) => {
 };
 
 const postUser = (req, res) => {
-  usersModel.create(req.body)
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => usersModel.create({
+      email: req.body.email,
+      password: hash,
+    }))
     .then((user) => {
       res.status(201).send(user);
     })
