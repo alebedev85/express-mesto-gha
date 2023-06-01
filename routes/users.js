@@ -3,9 +3,9 @@ const userController = require('../controllers/users');
 
 router.get('/', userController.getUsers);
 
-router.get('/:userId', userController.getUserById);
+router.get('/me', userController.getMyUser);
 
-// router.post('/', userController.postUser);
+router.get('/:userId', userController.getUserById);
 
 router.patch('/me', userController.edithUser);
 

@@ -10,7 +10,7 @@ const handleError = (err, res) => {
     return;
   }
   if (err.name === 'ValidationError' || 'CastError') {
-    res.status(ERRORS_STATUS.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+    res.status(ERRORS_STATUS.BAD_REQUEST).send({ message: err.message });
     return;
   }
   res.status(ERRORS_STATUS.INTERNAL_ERROR).send({

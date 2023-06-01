@@ -11,13 +11,6 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: new mongoose.Types.ObjectId('646c77bd5221449462a62c29'),
-  };
-  next();
-});
-
 app.use(router);
 
 app.listen(3000, () => {

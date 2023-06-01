@@ -27,6 +27,20 @@ const getUserById = (req, res) => {
     });
 };
 
+const getMyUser = (req, res) => {
+  console.log(req.user._id);
+  usersModel.findById(req.user._id)
+    .orFail(() => {
+      throw new Error('Notfound');
+    })
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((err) => {
+      handleError(err, res);
+    });
+};
+
 /**
  *Функция регистрации нового пользователя, принимет данные пользователя,
   хеширует и сохраняет хешированный пароль
@@ -84,7 +98,7 @@ const editAvatarhUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
-  usersModel.findOne({ email })
+  usersModel.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
         return Promise.reject(new Error('Неправильные почта или пароль'));
@@ -114,6 +128,7 @@ const login = (req, res) => {
 
 module.exports = {
   getUsers,
+  getMyUser,
   getUserById,
   createUser,
   edithUser,
