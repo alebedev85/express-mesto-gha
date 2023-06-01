@@ -5,10 +5,13 @@ router.get('/', userController.getUsers);
 
 router.get('/:userId', userController.getUserById);
 
-router.post('/', userController.postUser);
+// router.post('/', userController.postUser);
 
 router.patch('/me', userController.edithUser);
 
 router.patch('/me/avatar', userController.editAvatarhUser);
+
+router.post('/signin', userController.login);
+router.post('/signup', userController.postUser);
 
 module.exports = router;

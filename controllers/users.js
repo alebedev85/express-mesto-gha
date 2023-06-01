@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const usersModel = require('../models/user');
 
 const handleError = require('../utils/handleError');
@@ -66,10 +67,49 @@ const editAvatarhUser = (req, res) => {
     });
 };
 
+/**
+ *Функция регистрации, принимает емеил и пороль,
+  проверяет пороль и генерирует токен
+ * @param {*} req
+ * @param {*} res
+ * @returns сгенерированный токен
+ */
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  usersModel.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Error('Неправильные почта или пароль'));
+          }
+          return user;
+        });
+    })
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        'super-strong-secret',
+        { expiresIn: '7d' },
+      );
+      res.send({ token });
+    })
+    .catch((err) => {
+      res
+        .status(401)
+        .send({ message: err.message });
+    });
+};
+
 module.exports = {
   getUsers,
   getUserById,
   postUser,
   edithUser,
   editAvatarhUser,
+  login,
 };
