@@ -11,7 +11,4 @@ router.patch('/me', userController.edithUser);
 
 router.patch('/me/avatar', userController.editAvatarhUser);
 
-router.post('/signin', userController.login);
-router.post('/signup', userController.createUser);
-
 module.exports = router;
