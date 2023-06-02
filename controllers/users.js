@@ -56,15 +56,15 @@ const createUser = (req, res, next) => {
       email: req.body.email,
       password: hash,
     }))
-    .orFail((err) => {
-      if (err.code === 11000) {
-        throw new NotFoundError('По запросу ничего не найдено');
-      }
-    })
     .then((user) => {
       res.status(201).send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        return next(new BadEmailError('Такой email уже используется'));
+      }
+      return next();
+    });
 };
 
 const edithUser = (req, res) => {
