@@ -2,43 +2,45 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const usersModel = require('../models/user');
 
+// Errors
+const BadEmailError = require('../errors/bad-email-err');
+const BadRequestError = require('../errors/bad-request-err');
+const HaveNoRightError = require('../errors/have-no-right');
+const NotFoundError = require('../errors/not-found-err');
+
 const handleError = require('../utils/handleError');
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   usersModel.find({})
+    .orFail(() => {
+      throw new NotFoundError('По запросу ничего не найдено');
+    })
     .then((users) => {
       res.send(users);
     })
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   usersModel.findById(req.params.userId)
     .orFail(() => {
-      throw new Error('Notfound');
+      throw new NotFoundError('По запросу ничего не найдено');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
-const getMyUser = (req, res) => {
-  console.log(req.user._id);
+const getMyUser = (req, res, next) => {
   usersModel.findById(req.user._id)
     .orFail(() => {
-      throw new Error('Notfound');
+      throw new NotFoundError('По запросу ничего не найдено');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
 /**
@@ -48,18 +50,21 @@ const getMyUser = (req, res) => {
  * @param {*} res
  * @returns оюъект с токеном токен
  */
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => usersModel.create({
       email: req.body.email,
       password: hash,
     }))
+    .orFail((err) => {
+      if (err.code === 11000) {
+        throw new NotFoundError('По запросу ничего не найдено');
+      }
+    })
     .then((user) => {
       res.status(201).send(user);
     })
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
 const edithUser = (req, res) => {
