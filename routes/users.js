@@ -13,7 +13,7 @@ router.patch('/me', celebrate({
     name: Joi.string().required().min(2).max(30),
     about: Joi.string().required().min(2).max(30),
   }),
-}),userController.edithUser);
+}), userController.edithUser);
 
 router.patch('/me/avatar', userController.editAvatarhUser);
 
