@@ -9,7 +9,7 @@ const HaveNoRightError = require('../errors/have-no-right');
 const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-error');
 
-const handleError = require('../utils/handleError');
+// const handleError = require('../utils/handleError');
 
 const getUsers = (req, res, next) => {
   usersModel.find({})
@@ -61,7 +61,12 @@ const createUser = (req, res, next) => {
       avatar: req.body.avatar,
     }))
     .then((user) => {
-      res.status(201).send(user);
+      res.status(201).send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      });
     })
     .catch((err) => {
       if (err.code === 11000) {
