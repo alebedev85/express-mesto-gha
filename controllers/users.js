@@ -7,6 +7,7 @@ const BadEmailError = require('../errors/bad-email-err');
 const BadRequestError = require('../errors/bad-request-err');
 const HaveNoRightError = require('../errors/have-no-right');
 const NotFoundError = require('../errors/not-found-err');
+const UnauthorizedError = require('../errors/unauthorized-error');
 
 const handleError = require('../utils/handleError');
 
@@ -67,30 +68,26 @@ const createUser = (req, res, next) => {
     });
 };
 
-const edithUser = (req, res) => {
+const edithUser = (req, res, next) => {
   usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
     .orFail(() => {
-      throw new Error('Notfound');
+      throw new NotFoundError('По запросу ничего не найдено');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
-const editAvatarhUser = (req, res) => {
+const editAvatarhUser = (req, res, next) => {
   usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
     .orFail(() => {
-      throw new Error('Notfound');
+      throw new NotFoundError('По запросу ничего не найдено');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
 /**
@@ -106,12 +103,12 @@ const login = (req, res) => {
   usersModel.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        throw new UnauthorizedError('Неправильные почта или пароль');
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            throw new UnauthorizedError('Неправильные почта или пароль');
           }
           return user;
         });
