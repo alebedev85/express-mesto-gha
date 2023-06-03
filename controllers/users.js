@@ -97,7 +97,7 @@ const editAvatarhUser = (req, res, next) => {
  * @param {*} res
  * @returns оюъект с токеном токен
  */
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   usersModel.findOne({ email }).select('+password')
@@ -121,11 +121,7 @@ const login = (req, res) => {
       );
       res.send({ token });
     })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
+    .catch(next);
 };
 
 module.exports = {
