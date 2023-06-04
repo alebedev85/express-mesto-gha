@@ -4,7 +4,6 @@ const usersModel = require('../models/user');
 
 // Errors
 const BadEmailError = require('../errors/bad-email-err');
-const BadRequestError = require('../errors/bad-request-err');
 const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-error');
 

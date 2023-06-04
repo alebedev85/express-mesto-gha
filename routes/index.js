@@ -1,17 +1,12 @@
 const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
 const auth = require('../middlewares/auth');
+const { validateUserBady } = require('../middlewares/validate');
 
 const userRouter = require('./users');
 const cardsRouter = require('./cards');
 const { login, createUser } = require('../controllers/users');
 
-router.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-  }).unknown(true),
-}), createUser);
+router.post('/signup', validateUserBady, createUser);
 
 router.post('/signin', login);
 
