@@ -29,9 +29,15 @@ const creatCard = (req, res) => {
 };
 
 const deleteCard = (req, res, next) => {
-  cardsModel.findByIdAndRemove(req.params.cardId)
+  cardsModel.findById(req.params.cardId)
     .orFail(() => {
       throw new NotFoundError('Ничего не найдено');
+    })
+    .then((card) => {
+      if (card.owner !== req.user._id) {
+        throw new HaveNoRightError('Вы не можете удалить чужую карточку');
+      }
+      cardsModel.findByIdAndRemove(req.params.cardId);
     })
     .then(() => res.send({ message: 'Пост удалён' }))
     .catch(next);

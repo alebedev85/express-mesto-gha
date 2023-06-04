@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const jwt = require('../utils/jwt');
 const usersModel = require('../models/user');
 
 // Errors
@@ -121,11 +121,7 @@ const login = (req, res, next) => {
         });
     })
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        'super-strong-secret',
-        { expiresIn: '7d' },
-      );
+      const token = jwt.signToken({ _id: user._id });
       res.send({ token });
     })
     .catch(next);
