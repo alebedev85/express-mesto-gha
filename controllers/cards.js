@@ -1,4 +1,8 @@
 const cardsModel = require('../models/card');
+
+const HaveNoRightError = require('../errors/have-no-right');
+const NotFoundError = require('../errors/not-found-err');
+
 const handleError = require('../utils/handleError');
 
 const getCards = (req, res) => {
@@ -24,15 +28,13 @@ const creatCard = (req, res) => {
     });
 };
 
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   cardsModel.findByIdAndRemove(req.params.cardId)
     .orFail(() => {
-      throw new Error('Notfound');
+      throw new NotFoundError('Ничего не найдено');
     })
     .then(() => res.send({ message: 'Пост удалён' }))
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
 const likeCard = (req, res) => {
