@@ -3,19 +3,15 @@ const cardsModel = require('../models/card');
 const HaveNoRightError = require('../errors/have-no-right');
 const NotFoundError = require('../errors/not-found-err');
 
-const handleError = require('../utils/handleError');
-
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   cardsModel.find({})
     .then((cards) => {
       res.send(cards);
     })
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
-const creatCard = (req, res) => {
+const creatCard = (req, res, next) => {
   cardsModel.create({
     owner: req.user._id,
     ...req.body,
@@ -23,9 +19,7 @@ const creatCard = (req, res) => {
     .then((users) => {
       res.status(201).send(users);
     })
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
 const deleteCard = (req, res, next) => {
@@ -43,7 +37,7 @@ const deleteCard = (req, res, next) => {
     .catch(next);
 };
 
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   cardsModel.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
@@ -52,12 +46,10 @@ const likeCard = (req, res) => {
     throw new Error('Notfound');
   })
     .then((card) => res.send(card))
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   cardsModel.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
@@ -66,9 +58,7 @@ const dislikeCard = (req, res) => {
     throw new Error('Notfound');
   })
     .then((card) => res.send(card))
-    .catch((err) => {
-      handleError(err, res);
-    });
+    .catch(next);
 };
 
 module.exports = {

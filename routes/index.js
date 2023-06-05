@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const auth = require('../middlewares/auth');
 const { validateUserBody } = require('../middlewares/validate');
+const NotFoundError = require('../errors/not-found-err');
 
 const userRouter = require('./users');
 const cardsRouter = require('./cards');
@@ -14,5 +15,9 @@ router.use(auth);
 
 router.use('/users', userRouter);
 router.use('/cards', cardsRouter);
+
+router.use(() => {
+  throw new NotFoundError('Такой страницы не существует');
+});
 
 module.exports = router;

@@ -7,8 +7,6 @@ const BadEmailError = require('../errors/bad-email-err');
 const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-error');
 
-// const handleError = require('../utils/handleError');
-
 const getUsers = (req, res, next) => {
   usersModel.find({})
     .orFail(() => {
