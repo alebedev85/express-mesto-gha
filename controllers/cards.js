@@ -25,7 +25,7 @@ const creatCard = (req, res, next) => {
 const deleteCard = (req, res, next) => {
   cardsModel.findById(req.params.cardId)
     .orFail(() => {
-      throw new NotFoundError('Ничего не найдено');
+      throw new NotFoundError('Такой карточки не существует');
     })
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
@@ -43,7 +43,7 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   ).orFail(() => {
-    throw new Error('Notfound');
+    throw new NotFoundError('Такой карточки не существует');
   })
     .then((card) => res.send(card))
     .catch(next);
@@ -55,7 +55,7 @@ const dislikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true },
   ).orFail(() => {
-    throw new Error('Notfound');
+    throw new NotFoundError('Такой карточки не существует');
   })
     .then((card) => res.send(card))
     .catch(next);
