@@ -27,7 +27,19 @@ const validateCardBady = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     link: Joi.string().required().pattern(/^https*:\/\/[A-Z0-9-._~:/?#[\]@!$&'()*+,;=]+/i),
-  }).unknown(true),
+  }),
+});
+
+const validationUserId = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().alphanum().length(24),
+  }),
+});
+
+const validationCardId = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().alphanum().length(24),
+  }),
 });
 
 module.exports = {
@@ -35,4 +47,6 @@ module.exports = {
   validateCardBady,
   validateEditUserInfo,
   validateEditUserAvatar,
+  validationUserId,
+  validationCardId,
 };
