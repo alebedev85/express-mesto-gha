@@ -7,7 +7,20 @@ const validateUserBady = celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(/^https*:\/\/[A-Z0-9-._~:/?#[\]@!$&'()*+,;=]+/i),
-  }).unknown(true),
+  }),
+});
+
+const validateEditUserInfo = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+  }),
+});
+
+const validateEditUserAvatar = celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().pattern(/^https*:\/\/[A-Z0-9-._~:/?#[\]@!$&'()*+,;=]+/i),
+  }),
 });
 
 const validateCardBady = celebrate({
@@ -20,4 +33,6 @@ const validateCardBady = celebrate({
 module.exports = {
   validateUserBady,
   validateCardBady,
+  validateEditUserInfo,
+  validateEditUserAvatar,
 };

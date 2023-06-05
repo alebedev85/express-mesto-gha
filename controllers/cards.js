@@ -39,7 +39,7 @@ const deleteCard = (req, res, next) => {
       }
       cardsModel.findByIdAndRemove(req.params.cardId);
     })
-    .then(() => res.send({ message: 'Пост удалён' }))
+    .then(() => res.status(200).send({ message: 'Пост удалён' }))
     .catch(next);
 };
 
