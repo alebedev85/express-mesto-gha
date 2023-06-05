@@ -37,9 +37,9 @@ const deleteCard = (req, res, next) => {
       if (card.owner.toString() !== req.user._id) {
         throw new HaveNoRightError('Вы не можете удалить чужую карточку');
       }
-      cardsModel.findByIdAndRemove(req.params.cardId);
+      cardsModel.findByIdAndRemove(req.params.cardId)
+        .then(() => res.send({ message: 'Пост удалён' }));
     })
-    .then(() => res.send({ message: 'Пост удалён' }))
     .catch(next);
 };
 
