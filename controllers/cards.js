@@ -34,14 +34,12 @@ const deleteCard = (req, res, next) => {
       throw new NotFoundError('Ничего не найдено');
     })
     .then((card) => {
-      console.log(card.owner);
-      console.log(req.user._id);
-      if (card.owner !== req.user._id) {
+      if (card.owner.toString() !== req.user._id) {
         throw new HaveNoRightError('Вы не можете удалить чужую карточку');
       }
       cardsModel.findByIdAndRemove(req.params.cardId);
     })
-    .then(() => res.status(200).send({ message: 'Пост удалён' }))
+    .then(() => res.send({ message: 'Пост удалён' }))
     .catch(next);
 };
 
