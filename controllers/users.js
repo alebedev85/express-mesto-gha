@@ -6,12 +6,10 @@ const usersModel = require('../models/user');
 const BadEmailError = require('../errors/bad-email-err');
 const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-error');
+const BadRequestError = require('../errors/bad-request-err');
 
 const getUsers = (req, res, next) => {
   usersModel.find({})
-    .orFail(() => {
-      throw new NotFoundError('По запросу ничего не найдено');
-    })
     .then((users) => {
       res.send(users);
     })
@@ -21,26 +19,33 @@ const getUsers = (req, res, next) => {
 const getUserById = (req, res, next) => {
   usersModel.findById(req.params.userId)
     .orFail(() => {
-      throw new NotFoundError('По запросу ничего не найдено');
+      throw new NotFoundError('Пользователь не найден');
     })
     .then((user) => {
       res.send(user);
     })
     .catch((err) => {
-      console.log(err);
-      return next();
+      if (err.name === 'CastError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
     });
 };
 
 const getMyUser = (req, res, next) => {
   usersModel.findById(req.user._id)
     .orFail(() => {
-      throw new NotFoundError('По запросу ничего не найдено');
+      throw new NotFoundError('Пользователь не найден');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
+    });
 };
 
 /**
@@ -71,30 +76,48 @@ const createUser = (req, res, next) => {
       if (err.code === 11000) {
         return next(new BadEmailError('Такой email уже используется'));
       }
-      return next();
+      if (err.name === 'ValidationError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
     });
 };
 
 const edithUser = (req, res, next) => {
-  usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
+  usersModel.findByIdAndUpdate(req.user._id, {
+    name: req.body.name,
+    about: req.body.about,
+  }, { new: true, runValidators: true })
     .orFail(() => {
-      throw new NotFoundError('По запросу ничего не найдено');
+      throw new NotFoundError('Пользователь не найден');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
+    });
 };
 
 const editAvatarhUser = (req, res, next) => {
-  usersModel.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true })
+  usersModel.findByIdAndUpdate(req.user._id, {
+    avatar: req.body.avatar,
+  }, { new: true, runValidators: true })
     .orFail(() => {
-      throw new NotFoundError('По запросу ничего не найдено');
+      throw new NotFoundError('Пользователь не найден');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
+    });
 };
 
 /**
