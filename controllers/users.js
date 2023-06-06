@@ -26,7 +26,10 @@ const getUserById = (req, res, next) => {
     .then((user) => {
       res.send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      console.log(err);
+      return next();
+    });
 };
 
 const getMyUser = (req, res, next) => {
