@@ -2,6 +2,7 @@ const cardsModel = require('../models/card');
 
 const HaveNoRightError = require('../errors/have-no-right');
 const NotFoundError = require('../errors/not-found-err');
+const BadRequestError = require('../errors/bad-request-err');
 
 const getCards = (req, res, next) => {
   cardsModel.find({})
@@ -13,13 +14,19 @@ const getCards = (req, res, next) => {
 
 const creatCard = (req, res, next) => {
   cardsModel.create({
+    name: req.body.name,
+    link: req.body.link,
     owner: req.user._id,
-    ...req.body,
   })
     .then((users) => {
       res.status(201).send(users);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
+    });
 };
 
 const deleteCard = (req, res, next) => {
@@ -32,9 +39,15 @@ const deleteCard = (req, res, next) => {
         throw new HaveNoRightError('Вы не можете удалить чужую карточку');
       }
       cardsModel.findByIdAndRemove(req.params.cardId)
-        .then(() => res.send({ message: 'Пост удалён' }));
+        .then(() => res.send({ message: 'Пост удалён' }))
+        .catch(next);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
+    });
 };
 
 const likeCard = (req, res, next) => {
@@ -46,7 +59,12 @@ const likeCard = (req, res, next) => {
     throw new NotFoundError('Такой карточки не существует');
   })
     .then((card) => res.send(card))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
+    });
 };
 
 const dislikeCard = (req, res, next) => {
@@ -58,7 +76,12 @@ const dislikeCard = (req, res, next) => {
     throw new NotFoundError('Такой карточки не существует');
   })
     .then((card) => res.send(card))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new BadRequestError('Введены некорректные данные'));
+      }
+      return next(err);
+    });
 };
 
 module.exports = {
