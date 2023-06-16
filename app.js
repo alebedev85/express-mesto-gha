@@ -12,6 +12,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 const app = express();
+app.use(cors());
 
 // Массив доменов, с которых разрешены кросс-доменные запросы
 // const allowedCors = [
@@ -49,8 +50,6 @@ app.use(helmet());
 app.use(express.json());
 
 app.use(requestLogger);
-
-// app.use(cors());
 
 app.use(router);
 
